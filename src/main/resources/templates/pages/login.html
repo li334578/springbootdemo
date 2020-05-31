@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <style type="text/css">
+        .container {
+            width: 420px;
+            height: 280px;
+            min-height: 280px;
+            max-height: 280px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            padding: 20px;
+            z-index: 130;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 3px 18px rgba(100, 0, 0, .5);
+            font-size: 16px;
+        }
+
+        .layui-input {
+            border-radius: 5px;
+            width: 300px;
+            height: 40px;
+            font-size: 15px;
+        }
+
+        .layui-form-item {
+            margin-left: -20px;
+        }
+
+        #logoid {
+            margin-top: -16px;
+            padding-left: 150px;
+            padding-bottom: 15px;
+        }
+
+        .layui-btn {
+            margin-left: -50px;
+            border-radius: 5px;
+            width: 350px;
+            height: 40px;
+            font-size: 15px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<form class="layui-form">
+    <div class="container">
+        <div class="layui-form-mid layui-word-aux">
+            <img id="logoid" src="../static/images/logo.png" height="35">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密 &nbsp;&nbsp;码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+        </div>
+        <div class="layui-form-item" style="margin-top: 45px">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="button" id="authenticationBtn" lay-submit lay-filter="formDemo">登陆
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="../static/layui/layui.js"></script>
+<script src="../static/js/jquery-3.3.1.min.js"></script>
+<script>
+    $(function () {
+        function login() {
+            let username = $("input[name='username']").val();
+            let password = $("input[name='password']").val();
+            $.ajax({
+                url: '/authentication',
+                data: {
+                    username: username,
+                    password: password
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == 0) {
+                        console.log("进来了");
+                        window.top.location.href = "/index";
+                        // $.ajax({
+                        //     url:'/index',
+                        //     type:'get'
+                        // })
+                    } else {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            layer.msg(data.msg);
+                        });
+                    }
+                }
+            });
+        }
+
+        $("#authenticationBtn").click(function ({}) {
+            login();
+        });
+        $(document).keydown(function () {
+            if (event.keyCode == 13) {
+                //回车键的键值为13
+                login();
+            }
+        });
+    })
+</script>
+</body>
+</html>
