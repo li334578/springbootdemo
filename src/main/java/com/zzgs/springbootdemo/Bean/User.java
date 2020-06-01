@@ -1,6 +1,8 @@
 package com.zzgs.springbootdemo.Bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author : LiWenBo
@@ -9,6 +11,8 @@ import lombok.Data;
  * @date : 2020-05-02 13:58:36
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
   /** 用户id */

@@ -1,6 +1,7 @@
 package com.zzgs.springbootdemo.Service;
 
 import com.zzgs.springbootdemo.Bean.User;
+import com.zzgs.springbootdemo.Dto.UserDto;
 
 import java.util.List;
 import java.util.Set;
@@ -34,15 +35,36 @@ public interface UserService {
      *
      * @return 用户列表
      */
-    List<User> findAll();
+    List<UserDto> findAll();
 
     /**
      * 根据 用户姓名和部门id分页查询用户信息
-     * @param pageNum 当前页数
-     * @param pageSize 每页显示条数
-     * @param name 用户姓名
+     *
+     * @param pageNum      当前页数
+     * @param pageSize     每页显示条数
+     * @param name         用户姓名
      * @param departmentId 部门id
      * @return 用户列表
      */
     List<User> findByNameAndDepartmentId(Integer pageNum, Integer pageSize, String name, Integer departmentId);
+
+    /**
+     * 添加用户时的重复性校验
+     *
+     * @param name          员工姓名
+     * @param userJobNumber 员工工号
+     * @param userName      员工用户名
+     * @param userEmail     员工邮箱
+     * @param userPhone     员工手机号
+     * @return 重复性信息
+     */
+    String findRepeatability(String name, String userJobNumber, String userName, String userEmail, String userPhone);
+
+    /**
+     * 添加员工
+     *
+     * @param user 员工对象
+     * @return 受影响行数
+     */
+    Integer addUser(User user);
 }

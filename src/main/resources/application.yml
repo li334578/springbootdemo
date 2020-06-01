@@ -34,4 +34,4 @@ logging:
     com:
       zzgs:
         springbootdemo:
-          mapper: debug
+          Mapper: debug

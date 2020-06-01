@@ -2,10 +2,13 @@ package com.zzgs.springbootdemo.Service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.zzgs.springbootdemo.Bean.User;
+import com.zzgs.springbootdemo.Dto.UserDto;
 import com.zzgs.springbootdemo.Mapper.UserDao;
 import com.zzgs.springbootdemo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 import java.util.Set;
@@ -50,8 +53,8 @@ public class UserServiceImpl implements UserService {
      * @return 用户列表
      */
     @Override
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<UserDto> findAll() {
+        return userDao.findAllUserDto();
     }
 
     /**
@@ -65,7 +68,70 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> findByNameAndDepartmentId(Integer pageNum, Integer pageSize, String name, Integer departmentId) {
-        PageHelper.startPage(pageNum,pageSize);
-        return userDao.findByNameAndDepartmentId(name,departmentId);
+        PageHelper.startPage(pageNum, pageSize);
+        return userDao.findByNameAndDepartmentId(name, departmentId);
+    }
+
+    /**
+     * 添加用户时的重复性校验
+     *
+     * @param name          员工姓名
+     * @param userJobNumber 员工工号
+     * @param userName      员工用户名
+     * @param userEmail     员工邮箱
+     * @param userPhone     员工手机号
+     * @return 重复性信息
+     */
+    @Override
+    public String findRepeatability(String name, String userJobNumber, String userName, String userEmail, String userPhone) {
+        User user;
+        user = userDao.findUserByName(name);
+        if (user != null) {
+            return "员工姓名已存在";
+        }
+        user = userDao.findUserByUserJobNumber(userJobNumber);
+        if (user != null) {
+            return "员工工号已存在";
+        }
+        user = userDao.findUserByUserName(userName);
+        if (user != null) {
+            return "员工账户名已存在";
+        }
+        user = userDao.findUserByUserEmail(userEmail);
+        if (user != null) {
+            return "员工邮箱已存在";
+        }
+        user = userDao.findUserByUserPhone(userPhone);
+        if (user != null) {
+            return "员工手机号已存在";
+        }
+        return null;
+    }
+
+    /**
+     * 添加员工
+     *
+     * @param user 员工对象
+     * @return 受影响行数
+     */
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public Integer addUser(User user) {
+        try {
+            if (userDao.addUser(user) == 1) {
+                // 添加成功 添加职位信息
+                if (userDao.addUserPosition(user.getUserId(), 0) == 1) {
+                    return 1;
+                } else {
+                    throw new RuntimeException("用户职位信息没有添加成功");
+                }
+            } else {
+                // 没有添加成功
+                throw new RuntimeException("用户没有添加成功");
+            }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return 0;
     }
 }
