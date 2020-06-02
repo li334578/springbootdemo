@@ -61,10 +61,47 @@ public interface UserService {
     String findRepeatability(String name, String userJobNumber, String userName, String userEmail, String userPhone);
 
     /**
+     * 更新用户时的重复性校验
+     *
+     * @param userId        员工id
+     * @param name          员工姓名
+     * @param userJobNumber 员工工号
+     * @param userName      员工用户名
+     * @param userEmail     员工邮箱
+     * @param userPhone     员工手机号
+     * @return 重复性信息
+     */
+    String findRepeatability(Integer userId, String name, String userJobNumber, String userName, String userEmail, String userPhone);
+
+    /**
      * 添加员工
      *
      * @param user 员工对象
      * @return 受影响行数
      */
     Integer addUser(User user);
+
+    /**
+     * 根据用户id删除用户
+     *
+     * @param userId 用户id
+     * @return 受影响行数
+     */
+    Integer delUser(Integer userId);
+
+    /**
+     * 根据用户id查询用户信息
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     */
+    User findUserByUserId(Integer userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户对象
+     * @return 受影响行数
+     */
+    Integer updateUser(User user);
 }

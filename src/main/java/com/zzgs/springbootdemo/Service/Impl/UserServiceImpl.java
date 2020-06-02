@@ -109,6 +109,43 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 更新用户时的重复性校验
+     *
+     * @param userId        员工id
+     * @param name          员工姓名
+     * @param userJobNumber 员工工号
+     * @param userName      员工用户名
+     * @param userEmail     员工邮箱
+     * @param userPhone     员工手机号
+     * @return 重复性信息
+     */
+    @Override
+    public String findRepeatability(Integer userId, String name, String userJobNumber, String userName, String userEmail, String userPhone) {
+        User user;
+        user = userDao.findUserByName(name);
+        if (user != null && !user.getUserId().equals(userId)) {
+            return "员工姓名已存在";
+        }
+        user = userDao.findUserByUserJobNumber(userJobNumber);
+        if (user != null && !user.getUserJobNumber().equals(userJobNumber)) {
+            return "员工工号已存在";
+        }
+        user = userDao.findUserByUserName(userName);
+        if (user != null && !user.getUserName().equals(userName)) {
+            return "员工账户名已存在";
+        }
+        user = userDao.findUserByUserEmail(userEmail);
+        if (user != null && !user.getUserEmail().equals(userEmail)) {
+            return "员工邮箱已存在";
+        }
+        user = userDao.findUserByUserPhone(userPhone);
+        if (user != null && !user.getUserPhone().equals(userPhone)) {
+            return "员工手机号已存在";
+        }
+        return null;
+    }
+
+    /**
      * 添加员工
      *
      * @param user 员工对象
@@ -133,5 +170,38 @@ public class UserServiceImpl implements UserService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return 0;
+    }
+
+    /**
+     * 根据用户id删除用户
+     *
+     * @param userId 用户id
+     * @return 受影响行数
+     */
+    @Override
+    public Integer delUser(Integer userId) {
+        return userDao.delUser(userId);
+    }
+
+    /**
+     * 根据用户id查询用户信息
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     */
+    @Override
+    public User findUserByUserId(Integer userId) {
+        return userDao.findUserByUserId(userId);
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户对象
+     * @return 受影响行数
+     */
+    @Override
+    public Integer updateUser(User user) {
+        return userDao.updateUser(user);
     }
 }

@@ -126,4 +126,32 @@ public interface UserDao {
             "values(#{userId},#{department_position_id})")
     Integer addUserPosition(@Param("userId") Integer userId, @Param("department_position_id") Integer department_position_id);
 
+    /**
+     * 删除用户
+     *
+     * @param userId 用户id
+     * @return 受影响行数
+     */
+    @Delete("update user set user_del_flag = 1 where user_id = #{userId} ")
+    Integer delUser(@Param("userId") Integer userId);
+
+    /**
+     * 根据用户的userId查询用户信息
+     *
+     * @param userId 用户id
+     * @return 用户信息
+     */
+    @Select("select * from user " +
+            "where user_del_flag = 0 and user_id = #{userId}")
+    User findUserByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户对象
+     * @return 受影响行数
+     */
+    @Update("update user set name = #{name}, user_email = #{userEmail}, user_phone = #{userPhone}, " +
+            "user_job_number = #{userJobNumber}, department_id = #{departmentId} where user_id = #{userId}")
+    Integer updateUser(User user);
 }
