@@ -1,6 +1,7 @@
 package com.zzgs.springbootdemo.Controller;
 
 import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageInfo;
 import com.zzgs.springbootdemo.Bean.Department;
 import com.zzgs.springbootdemo.Bean.ResultBean;
 import com.zzgs.springbootdemo.Bean.User;
@@ -111,8 +112,9 @@ public class UserController {
         map.put("userList", userList);
         map.put("departmentList", departmentList);
         resultBean.setData(map);
-        log.info(resultBean.toString());
+//        PageInfo pageInfo = new PageInfo(userList);
         model.addAttribute("user", userService.findUserByUserName(subject.getPrincipal().toString()));
+//        model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("ResultBean", resultBean);
         return "pages/member";
     }

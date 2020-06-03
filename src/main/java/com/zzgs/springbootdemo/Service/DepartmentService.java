@@ -26,4 +26,13 @@ public interface DepartmentService {
      * @return 受影响行数
      */
     Integer addDepartment(Department department);
+
+
+    /**
+     * 根据部门名称查询部门信息
+     *
+     * @param departmentName 部门名称
+     * @return 部门对象
+     */
+    Department findDeptByDeptName(String departmentName);
 }

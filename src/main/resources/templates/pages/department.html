@@ -5,7 +5,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="../static/layui/css/layui.css">
     <style type="text/css">
-        i{
+        i {
             margin-right: 20px;
         }
     </style>
@@ -50,7 +50,7 @@
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item">
                     <dd>
-                        <a href="/index" class="layui-this"><i class="layui-icon layui-icon-app"></i>主页</a>
+                        <a href="/index"><i class="layui-icon layui-icon-app"></i>主页</a>
                     </dd>
                 </li>
                 <li class="layui-nav-item">
@@ -70,7 +70,7 @@
                 </li>
                 <li class="layui-nav-item">
                     <dd>
-                        <a href="/department"><i class="layui-icon layui-icon-user"></i>部门</a>
+                        <a href="/department" class="layui-this"><i class="layui-icon layui-icon-user"></i>部门</a>
                     </dd>
                 </li>
                 <li class="layui-nav-item">
@@ -84,7 +84,41 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">内容主体区域</div>
+        <div style="padding: 15px;">
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <colgroup>
+                    <col width="200">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>部门</th>
+                    <th>入职时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="Department : ${departmentList}">
+                    <td th:text="${Department.departmentName}">贤心</td>
+                    <td th:text="${Department.departmentCreateTime}">汉族</td>
+                    <td>
+                        <!--                        <button class="layui-btn layui-btn-xs"-->
+                        <!--                                th:onclick="'javascript:editUser('+${user.userId}+')'">编辑-->
+                        <!--                        </button>-->
+                        <!--                        <button class="layui-btn layui-btn-danger layui-btn-xs"-->
+                        <!--                                th:onclick="'javascript:delUser('+${user.userId}+')'">删除-->
+                        <!--                        </button>-->
+                        <button class="layui-btn layui-btn-normal layui-btn-xs">查看</button>
+                        <button class="layui-btn layui-btn-xs">编辑
+                        </button>
+                        <button class="layui-btn layui-btn-danger layui-btn-xs">删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="layui-footer">

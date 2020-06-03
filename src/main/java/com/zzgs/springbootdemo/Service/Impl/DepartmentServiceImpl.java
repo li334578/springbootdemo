@@ -6,6 +6,7 @@ import com.zzgs.springbootdemo.Mapper.DepartmentDao;
 import com.zzgs.springbootdemo.Service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
@@ -36,5 +37,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         String now = DateUtil.now();
         department.setDepartmentCreateTime(now);
         return departmentDao.addDepartment(department);
+    }
+
+    /**
+     * 根据部门名称查询部门信息
+     *
+     * @param departmentName 部门名称
+     * @return 部门对象
+     */
+    @Override
+    public Department findDeptByDeptName(String departmentName) {
+        return departmentDao.findDeptByDeptName(departmentName);
     }
 }

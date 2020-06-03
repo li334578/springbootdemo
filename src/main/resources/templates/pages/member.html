@@ -65,7 +65,13 @@
                 </li>
                 <li class="layui-nav-item">
                     <dd>
-                        <a href="/member" class="layui-this"><i class="layui-icon layui-icon-user"></i>成员</a>
+                        <a href="/member" class="layui-this"><i class="layui-icon layui-icon-username"></i>成员</a>
+                    </dd>
+                </li>
+
+                <li class="layui-nav-item">
+                    <dd>
+                        <a href="/department"><i class="layui-icon layui-icon-user"></i>部门</a>
                     </dd>
                 </li>
 
@@ -83,7 +89,7 @@
         <div style="padding: 15px;">
             <div>
                 <button type="button" class="layui-btn" onclick="addUserWindows()">添加员工</button>
-                <button type="button" class="layui-btn">添加部门</button>
+                <button type="button" class="layui-btn" onclick="addDeptWindows()">添加部门</button>
             </div>
             <table class="layui-table" lay-even="" lay-skin="row">
                 <colgroup>
@@ -193,9 +199,23 @@
 </form>
 
 <div id="addTip" style="display:none;padding: 15px;text-align:center;">
-    <p>添加员工成功</p>
+    <p>添加成功</p>
     <button type="button" class="layui-btn" onclick="location.reload();">确定</button>
 </div>
+
+<form class="layui-form" id="addDept" style="display:none;padding: 15px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="deptName" lay-verify="title" autocomplete="off" placeholder="请输入部门名称"
+                   class="layui-input">
+        </div>
+    </div>
+    <div style="text-align:center;">
+        <button id="addDeptBtn" type="button" class="layui-btn">提交</button>
+        <button type="reset" class="layui-btn layui-btn-danger">重置</button>
+    </div>
+</form>
 <script src="../static/layui/layui.js"></script>
 <script src="../static/js/jquery-3.3.1.min.js"></script>
 <script>
@@ -286,7 +306,7 @@
             $.ajax({
                 url: '/UserRepeatabilityCheck',
                 data: {
-                    userId:null,
+                    userId: null,
                     name: name,
                     userJobNumber: userJobNumber,
                     userName: userName,
@@ -340,6 +360,42 @@
                 }
             })
         });
+        $("#addDeptBtn").click(function () {
+            let deptName = $("input[name='deptName']").val();
+            if (deptName == "") {
+                layer.open({
+                    title: '提示信息'
+                    , content: '部门名称不能为空'
+                });
+                return;
+            }
+            $.ajax({
+                url: '/addDepartment',
+                data: {
+                    departmentName: deptName
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 0) {
+                        // 添加成功
+                        layer.open({
+                            type: 1,
+                            area: ['150px', '150px'],
+                            title: 'tip'
+                            , content: $("#addTip"),
+                            shade: 0
+                        });
+                    } else {
+                        // 添加失败
+                        layer.open({
+                            title: '提示信息'
+                            , content: data.msg
+                        });
+                    }
+                }
+            })
+        });
     });
 
     function addUserWindows() {
@@ -356,10 +412,10 @@
     function editUser(userId) {
         layer.open({
             type: 2,
-            shade:0.1,
-            area:['480px','620px'],
-            title:'编辑员工信息',
-            content:'/editUser/'+userId
+            shade: 0.1,
+            area: ['480px', '620px'],
+            title: '编辑员工信息',
+            content: '/editUser/' + userId
         })
     }
 
@@ -375,7 +431,7 @@
             $.ajax({
                 url: '/delUser',
                 data: {
-                    userId:userId
+                    userId: userId
                 },
                 type: 'post',
                 dataType: 'json',
@@ -386,11 +442,11 @@
                         layer.msg(data.msg, {
                             time: 5000, //5s后自动关闭
                             btn: ['确定']
-                        },function (index) {
+                        }, function (index) {
                             layer.load(index);
                             location.reload();
                         });
-                    }else {
+                    } else {
                         // 删除失败
                         layer.msg(data.msg, {
                             time: 5000, //5s后自动关闭
@@ -400,6 +456,17 @@
                 }
             })
         })
+    }
+
+    function addDeptWindows() {
+        // 添加员工的弹窗 layer.closeAll();
+        layer.open({
+            type: 1,
+            area: ['300px', '200px'],
+            title: '添加部门'
+            , content: $("#addDept"),
+            shade: 0
+        });
     }
 
 </script>
